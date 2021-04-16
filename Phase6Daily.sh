@@ -30,7 +30,7 @@ do
   if [[ ${i: -4} == ".inp" ]]; then 
     export INPUT_NAME=$(echo $i | sed -r "s/.+\/(.+)\..+/\1/")
     echo "Executing Input: $INPUT_NAME"
-    cat "../../../Inputs/$i" |"./BankingSystem" > "../../../Outputs/Output1.bto"
+    cat "../../../Inputs/$i" |"./BankingSystem" > "../../../Outputs/$i.bto"
     cp "./ioFiles/session.etf" "../../../Outputs/"
   fi
 done
