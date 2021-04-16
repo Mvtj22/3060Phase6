@@ -4,11 +4,11 @@ echo "Create Fresh version of project"
 export WORKING_DIR=$PWD
 export PROJECT_DIR="Project"
 export BACK_END="BackEnd"
-if [ -d "$WORKING_DIR" ]; then rm -Rf $PROJECT_DIR; fi
-if [ -d "$WORKING_DIR" ]; then rm -Rf $BACK_END; fi
+#if [ -d "$WORKING_DIR" ]; then rm -Rf $PROJECT_DIR; fi
+#if [ -d "$WORKING_DIR" ]; then rm -Rf $BACK_END; fi
 
-git clone https://github.com/Mvtj22/3060FrontEnd.git "$PROJECT_DIR"
-git clone https://github.com/jonathan-hermans/SQA "$BACK_END"
+#git clone https://github.com/Mvtj22/3060FrontEnd.git "$PROJECT_DIR"
+#git clone https://github.com/jonathan-hermans/SQA "$BACK_END"
 
 echo "Building Current Project"
 cd "$WORKING_DIR/$PROJECT_DIR/testFile/testFile"
