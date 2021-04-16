@@ -10,31 +10,24 @@ if [ -d "$WORKING_DIR" ]; then rm -Rf $BACK_END; fi
 git clone https://github.com/Mvtj22/3060FrontEnd.git "$PROJECT_DIR"
 git clone https://github.com/jonathan-hermans/SQA "$BACK_END"
 
-echo "Building Current Project"
-cd "$WORKING_DIR/$PROJECT_DIR/testFile/testFile"
-make 
-
 export BUILD="../$PROJECT_DIR/testFile/testFile/"
 echo "Build Path: $BUILD"
 
-
-echo "Enter the day number (1, 2, 3, 4 or 5): "
-read varname
-
 # Get Lists of files to test against. 
-cd "$WORKING_DIR/Inputs/Day$varname"
+cd "$WORKING_DIR/Inputs"
 ITEMS=$(find . -type f -print)
 
 # Change directory to our build to run our program. 
-cd ../$BUILD
+cd $BUILD
+
 
 # Iterate over our input files and run it. 
 for i in $ITEMS
 do 
-	if [[ ${i: -4} == ".inp" ]]; then 
-    	export INPUT_NAME=$(echo $i | sed -r "s/.+\/(.+)\..+/\1/")
-    	echo "Executing Input: $INPUT_NAME"
-    	cat "../../../Inputs/Day$varname/$i" |"./BankingSystem" > "../../../Outputs/Day$varname/$i.bto"
-    	cp "./ioFiles/session.etf" "../../../Outputs/Day$varname/$i.etf"
-  	fi
+	echo "Current path: $ITEMS"
+	export INPUT_NAME=$(echo $i | sed -r "s/.+\/(.+)\..+/\1/")
+	echo "Executing Input: $INPUT_NAME"
+	cp "./ioFiles/session.etf" "../../../Outputs/"
 done
+
+read -n 1 -s
