@@ -21,7 +21,7 @@ echo "Build Path: $BUILD"
 echo "Enter the day number (1, 2, 3, 4 or 5): "
 read varname
 
-# Get Lists of files to test against. 
+# Get inputs. 
 cd "$WORKING_DIR/Inputs/Day$varname"
 ITEMS=$(find . -type f -print)
 
@@ -38,3 +38,38 @@ do
     	cp "./ioFiles/session.etf" "../../../Outputs/Day$varname/$i.etf"
   	fi
 done
+
+# Change to Output Directory and get files
+cd "$WORKING_DIR/Outputs/Day$varname"
+ITEMS=$(find . -type f -print)
+
+rm "$WORKING_DIR/Outputs/Day$varname/WholeDay.etf"
+max=$(ls -F | grep -v .bto | grep -v .info | wc -l)
+
+cd ../$BUILD
+
+# Iterate over our input files and merge them. 
+count=1
+for i in $ITEMS
+do 
+	if [[ ${i: -4} == ".etf" ]]; then 
+    	export ETF_NAME=$(echo $i | sed -r "s/.+\/(.+)\..+/\1/")
+    	echo "Merging ETF: $ETF_NAME"
+		if [[ $count == $max ]]
+		then
+			cat "../../../Outputs/Day$varname/$i" >> "../../../Outputs/Day$varname/WholeDay.etf"
+		else
+			sed '$d' "../../../Outputs/Day$varname/$i" >> "../../../Outputs/Day$varname/WholeDay.etf"
+		count=$(($count+1))
+		echo $count $max
+		fi
+  	fi
+done
+
+cd "$WORKING_DIR/$BACK_END"
+
+mergedBankTransFile="$WORKING_DIR/Outputs/Day$varname/WholeDay.etf"
+temp="$WORKING_DIR/Outputs"
+
+javac Writer.java Withdrawal.java Transfer.java Transaction.java Reader.java Paybill.java Disable.java Deposit.java ChangePlan.java BatchProcessor.java Accounts.java Account.java
+java BatchProcessor "$mergedBankTransFile" "MasterBankAccountsFile.txt" "$temp/newMasterCBA.info" "$temp/Day$varname/newCBAFile.info"
