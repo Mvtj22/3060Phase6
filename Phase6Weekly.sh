@@ -18,16 +18,37 @@ cd "$WORKING_DIR/Inputs"
 ITEMS=$(find . -type f -print)
 
 # Change directory to our build to run our program. 
-cd $BUILD
+cd "$WORKING_DIR/Outputs"
 
-
-# Iterate over our input files and run it. 
-for i in $ITEMS
-do 
-	echo "Current path: $ITEMS"
-	export INPUT_NAME=$(echo $i | sed -r "s/.+\/(.+)\..+/\1/")
-	echo "Executing Input: $INPUT_NAME"
-	cp "./ioFiles/session.etf" "../../../Outputs/"
+# empty the current Ouputs
+for i in */
+do
+	cd $i
+	for j in *
+	do
+		rm $j
+	done
+	cd ..
 done
+rm newMasterCBA.info
 
-read -n 1 -s
+Day=1;
+
+for i in */
+do
+	arg1="$WORKING_DIR/Outputs/${i}WholeDay.etf"
+	arg2=""
+	arg3="$WORKING_DIR/Outputs/newMasterCBA.info"
+	arg4="$WORKING_DIR/Outputs/${i}newCBAFile.info"
+
+	if [[ $Day == 1 ]]
+	then
+		arg2="$WORKING_DIR/$BACK_END/MasterBankAccountsFile.txt"
+	else
+		arg2="$WORKING_DIR/Outputs/newMasterCBA.info"
+	fi
+
+	.././Phase6Daily.sh $Day "$arg1" "$arg2" "$arg3" "$arg4"
+
+	Day=$(($Day+1))
+done
